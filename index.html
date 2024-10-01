@@ -56,7 +56,7 @@
         overflow: hidden;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
         animation: sway 2s infinite alternate;
-        z-index: 10;
+        z-index: 1; /* Adjusted to ensure button is above */
       }
 
       video#live-camera {
@@ -75,7 +75,7 @@
         top: 0;
         left: 0;
         opacity: 0;
-        z-index: 11;
+        z-index: 1; /* Adjusted to ensure button is above */
         transition: opacity 0.1s ease-in-out;
         object-fit: contain;
       }
@@ -88,6 +88,8 @@
       .mirror-text {
         margin-top: 20px;
         text-align: center;
+        position: relative;
+        z-index: 2; /* Ensure this is above other elements */
       }
 
       @keyframes sway {
@@ -201,6 +203,23 @@
       .ghost:hover {
         opacity: 1;
       }
+
+      /* Button Styles */
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #555; /* Button background color */
+        color: white; /* Button text color */
+        text-decoration: none; /* Remove underline */
+        border-radius: 5px; /* Rounded corners */
+        font-size: 16px; /* Font size */
+        transition: background-color 0.3s; /* Smooth transition */
+        z-index: 3; /* Ensure button is on top */
+      }
+
+      .button:hover {
+        background-color: #777; /* Change background on hover */
+      }
     </style>
   </head>
   <body>
@@ -213,12 +232,12 @@
       ></video>
     </div>
 
-<div class="mirror-text">
-  <h2>Take a look!</h2>
-  <h3>You might look bad!</h3>
-  <h4>Mouse around and find out!!!11</h4>
-  <a href="https://hack.club/boba-manor" class="button">Open the door</a>
-</div>
+    <div class="mirror-text">
+      <h2>Take a look!</h2>
+      <h3>You might look bad!</h3>
+      <h4>Mouse around and find out!!!11</h4>
+      <a href="https://hack.club/boba-manor" class="button">Open the door</a>
+    </div>
 
     <script>
       const hoverVideo = document.getElementById("hover-video");
