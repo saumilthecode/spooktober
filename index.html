@@ -3,17 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cursed Mirror with Glitches and Sound</title>
+    <title>Cursed Mirror with Spooky Background</title>
     <style>
         body {
-            background-color: #111;
+            background: radial-gradient(circle at center, #111 30%, #000 100%);
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
             height: 100vh;
             margin: 0;
             color: white;
             font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
+            animation: mistMove 15s infinite;
+            opacity: 0.4;
+        }
+
+        @keyframes mistMove {
+            0% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(10%, -10%);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
         }
 
         .mirror-frame {
@@ -24,129 +51,231 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            animation: sway 2s infinite alternate;
+            z-index: 10;
         }
 
-        /* Camera stream for reflection */
-        video {
+        video#live-camera {
             width: 100%;
             height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
             object-fit: cover;
-            transform: scaleX(-1); /* Mirror effect */
-            filter: brightness(50%) contrast(120%);
-            animation: glitch 3s infinite;
         }
 
-        /* Glitch effect */
-        @keyframes glitch {
-            0%, 100% {
-                transform: scaleX(-1) translate(0, 0);
-                filter: brightness(50%) contrast(120%);
-            }
-            30% {
-                transform: scaleX(-1) translate(5px, -3px);
-            }
-            50% {
-                filter: brightness(70%) contrast(150%) hue-rotate(30deg);
-            }
-            80% {
-                transform: scaleX(-1) translate(-3px, 2px);
-            }
-        }
-
-        .reflection {
+        video#hover-video {
+            width: 100%;
+            height: 100%;
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        /* Adding ghostly figure */
-        .ghost {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(255,255,255,0.2), rgba(255,255,255,0));
-            border-radius: 50%;
             opacity: 0;
-            transform: translate(-50%, -50%);
-            animation: ghostAppear 10s infinite;
+            z-index: 11;
+            transition: opacity 0.1s ease-in-out;
+            object-fit: contain;
         }
 
-        @keyframes ghostAppear {
-            0%, 90% {
-                opacity: 0;
-            }
-            40%, 50% {
-                opacity: 1;
-            }
+        .mirror-frame:hover video#hover-video {
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        /* Add rolling fog */
-        .fog {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-            opacity: 0.2;
-            animation: fogMove 20s infinite;
+        .mirror-text {
+            margin-top: 20px;
+            text-align: center;
         }
 
-        @keyframes fogMove {
+        @keyframes sway {
             0% {
-                transform: translateX(-100%);
+                transform: rotate(0deg);
             }
             100% {
-                transform: translateX(100%);
+                transform: rotate(2deg);
             }
         }
 
+        .ghost {
+            position: absolute;
+            width: 150px;
+            height: 225px;
+            background: #ffffff;
+            border-radius: 100px 100px 0 0;
+            box-shadow: -17px 0px 0px #dbdbdb inset, 0 0 50px #5939db;
+            animation: float 2s infinite;
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .ghost__eyes {
+            display: flex;
+            justify-content: space-around;
+            margin: 0 auto;
+            padding: 70px 0 0;
+            width: 90px;
+            height: 20px;
+        }
+
+        .ghost__eyes:before,
+        .ghost__eyes:after {
+            content: "";
+            display: block;
+            width: 15px;
+            height: 25px;
+            background: #00034b;
+            border-radius: 50%;
+        }
+
+        .ghost__dimples {
+            display: flex;
+            justify-content: space-around;
+            margin: 0 auto;
+            padding: 35px 0 0;
+            width: 130px;
+            height: 20px;
+        }
+
+        .ghost__dimples:before,
+        .ghost__dimples:after {
+            content: "";
+            display: block;
+            width: 15px;
+            height: 15px;
+            background: #ffbeff;
+            border-radius: 50%;
+        }
+
+        .ghost__feet {
+            width: 100%;
+            position: absolute;
+            bottom: -13px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ghost__feet-foot {
+            width: 25%;
+            height: 26px;
+            border-radius: 50%;
+            background: #ffffff;
+        }
+
+        .ghost__feet-foot:last-child {
+            background-image: linear-gradient(to right, #ffffff 55%, #dbdbdb 45%);
+        }
+
+        .shadow {
+            background: #000232;
+            width: 150px;
+            height: 40px;
+            margin-top: 50px;
+            border-radius: 50%;
+            animation: shadow 2s infinite;
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes shadow {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.9);
+            }
+        }
+
+        .ghost:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
 
-    <div class="mirror-frame">
-        <video id="camera-stream" autoplay></video>
-        <div class="reflection">
-            <div class="ghost"></div>
-            <div class="fog"></div>
-        </div>
+    <div class="mirror-frame" id="mirror">
+        <video id="live-camera" autoplay playsinline muted></video>
+        <video id="hover-video" src="https://github.com/saumilthecode/spooktober/blob/main/The%20Muffin%20Man%20-%20Shrek.mp4?raw=true" loop></video>
     </div>
 
-    <!-- Audio for creepy ghost sound -->
-    <audio id="ghost-sound" src="creepy-sound.mp3" preload="auto"></audio>
+    <div class="mirror-text">
+        <h2>Take a look!</h2>
+        <h3>You might look bad!</h3>
+        <h4>Mouse around and find out!!!11</h4>
+    </div>
 
     <script>
-        // Access the user's camera
-        const video = document.getElementById('camera-stream');
+        const hoverVideo = document.getElementById('hover-video');
+        const mirror = document.getElementById('mirror');
 
-        // Check if the browser supports getUserMedia
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true })
+        hoverVideo.pause();
+
+        mirror.addEventListener('mouseenter', () => {
+            hoverVideo.currentTime = 0;
+            hoverVideo.play();
+        });
+
+        mirror.addEventListener('mouseleave', () => {
+            hoverVideo.pause();
+            hoverVideo.currentTime = 0;
+        });
+
+        const liveCamera = document.getElementById('live-camera');
+        navigator.mediaDevices.getUserMedia({ video: true })
             .then(stream => {
-                video.srcObject = stream;
+                liveCamera.srcObject = stream;
             })
             .catch(err => {
-                console.log("Error accessing the camera: " + err);
+                console.error('Error accessing the camera: ', err);
             });
-        } else {
-            alert('Sorry, your browser does not support camera access.');
+
+        function generateGhosts(numGhosts) {
+            for (let i = 0; i < numGhosts; i++) {
+                const ghost = document.createElement('div');
+                ghost.classList.add('ghost');
+                
+                const eyes = document.createElement('div');
+                eyes.classList.add('ghost__eyes');
+                eyes.innerHTML = '<div></div><div></div>';
+
+                const dimples = document.createElement('div');
+                dimples.classList.add('ghost__dimples');
+                dimples.innerHTML = '<div></div><div></div>';
+
+                const feet = document.createElement('div');
+                feet.classList.add('ghost__feet');
+                feet.innerHTML = '<div class="ghost__feet-foot"></div><div class="ghost__feet-foot"></div>' + 
+                                 '<div class="ghost__feet-foot"></div><div class="ghost__feet-foot"></div>';
+
+                ghost.appendChild(eyes);
+                ghost.appendChild(dimples);
+                ghost.appendChild(feet);
+
+                document.body.appendChild(ghost);
+
+                const randomTop = Math.random() * 80 + 10;
+                const randomLeft = Math.random() * 80 + 10;
+                ghost.style.top = randomTop + '%';
+                ghost.style.left = randomLeft + '%';
+
+                ghost.addEventListener('mouseenter', () => {
+                    ghost.style.opacity = 1;
+                });
+                ghost.addEventListener('mouseleave', () => {
+                    ghost.style.opacity = 0;
+                });
+            }
         }
 
-        // Ghost animation sound effect
-        const ghost = document.querySelector('.ghost');
-        const ghostSound = document.getElementById('ghost-sound');
-
-        // Play sound when the ghost appears
-        ghost.addEventListener('animationstart', () => {
-            ghostSound.play();
-        });
+        generateGhosts(5);
     </script>
-
 </body>
 </html>
